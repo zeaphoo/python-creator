@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/fancy" >
+        <file>images/fancytoolbutton.svg</file>
+        <file>images/mode_Debug.png</file>
+        <file>images/mode_Edit.png</file>
+        <file>images/mode_Output.png</file>
+        <file>images/mode_Project.png</file>
+        <file>images/mode_Reference.png</file>
+	<file>images/closebutton.png</file>
+	<file>images/darkclosebutton.png</file>
+	<file>images/splitbutton_horizontal.png</file>
+	<file>images/inputfield.png</file>
+	<file>images/inputfield_disabled.png</file>
+        <file>images/panel_button.png</file>
+	<file>images/panel_button_checked.png</file>
+	<file>images/panel_button_checked_hover.png</file>
+	<file>images/panel_button_pressed.png</file>
+	<file>images/panel_button_hover.png</file>
+    </qresource>
+</RCC>

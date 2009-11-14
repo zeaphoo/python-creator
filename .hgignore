@@ -1,0 +1,6 @@
+syntax: glob
+*.pyc
+*.lib
+*.user
+*.dll
+*.db
