@@ -4,7 +4,7 @@ from PyQt4.QtCore import Qt
 actions = {
     'file_open':{
         'icon': '',
-        'text': u'Open ... ',
+        'text': u'Open Source File',
         'shortcut': Qt.CTRL | Qt.Key_O,
         'tip': u'',
     },

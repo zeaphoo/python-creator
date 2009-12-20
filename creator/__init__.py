@@ -17,6 +17,7 @@ class MainWindow(QtGui.QMainWindow):
         super(MainWindow, self).__init__()
         self._menubar = QtGui.QMenuBar(self)
         self._actions = {}
+        self._handlers = {}
         self.buildActions()
         self.buildMenus()
         self.setMenuBar(self._menubar)
@@ -34,6 +35,7 @@ class MainWindow(QtGui.QMainWindow):
                     filem.addSeparator()
                 else:
                     filem.addAction(self._actions[a])
+        self.registerHandler('file_exit', self.exit)
         
     def buildActions(self):
         from actions import actions
@@ -44,7 +46,19 @@ class MainWindow(QtGui.QMainWindow):
             QObject.connect(a, SIGNAL('triggered(bool)'), self.dispatchAction)
             self._actions[key] = a
 
-    def dispatchAction(self):
+    def dispatchAction(self, checked = False):
         action = self.sender()
         d = str(action.data().toString())
-        print d, type(d)
+        if not self._handlers.has_key(d):
+            print 'no handler for action', d
+            return
+        handler = self._handlers[d]
+        handler()
+        
+    def registerHandler(self, name, handler):
+        self._handlers[name] = handler
+        
+    def exit(self):
+        QApplication.closeAllWindows()
+        QApplication.processEvents()
+        QApplication.exit()
