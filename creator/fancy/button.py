@@ -34,11 +34,11 @@ class OutputToggleButton(QPushButton):
         self.ensurePolished()
         s = self.fontMetrics().size(Qt.TextSingleLine, self._text)
         #Expand to account for border image set by stylesheet above
-        s.rwidth() += 19 + 5 + 2
-        s.rheight() += 2 + 2
+        s.rwidth += (19 + 5 + 2)
+        s.rheight += (2 + 2)
         return s.expandedTo(QApplication.globalStrut())
         
-    def paintEvent(self.event):
+    def paintEvent(self, event):
         QPushButton.paintEvent(event)
         fm = self.fontMetrics()
         baseLine = (self.height() - fm.height() + 1) / 2 + fm.ascent()
