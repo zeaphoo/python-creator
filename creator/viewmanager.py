@@ -2,7 +2,16 @@
 
 from fancy import Navigation, EditorView
 from PyQt4.QtGui import QWidget
+from views import FileSystemView, CodeEditor
 
+class NavigationViewsManager:
+    def __init__(self):
+        self._views = []
+        self._views.append(FileSystemView())
+        
+    def getSubWidget(self, index):
+        return self._views[0]
+        
 class ViewManager:
     def __init__(self):
         self._views = {}
@@ -10,10 +19,13 @@ class ViewManager:
         self._initViews()
     
     def _initViews(self):
-        nav = Navigation(self)
+        
+        nav = Navigation(NavigationViewsManager())
         self._views['navigation'] = nav
-        ed = EditorView()
+        ed = EditorView(None, CodeEditor)
         self._views['editor'] = ed
+        txt = file('d:/img.py', 'rb').read()
+        ed._widget.setText(txt)
         
         
     def getView(self, name):
@@ -28,3 +40,5 @@ class ViewManager:
         
     def registerFactory(self, name, factory):
         return
+
+

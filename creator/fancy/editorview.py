@@ -8,10 +8,12 @@ from combobox import ComboBox
 import fancy_rc
 
 class EditorView(QWidget):
-    def __init__(self, parent = None):
+    def __init__(self, parent = None, editorWidget = None):
         super(EditorView, self).__init__(parent)
         self._toolBar = StyledBar(self)
-        self._widget = QWidget(self)
+        if editorWidget is None:
+            editorWidget = QWidget
+        self._widget = editorWidget(self)
         toolBarLayout = QHBoxLayout()
         toolBarLayout.setMargin(0)
         toolBarLayout.setSpacing(0)

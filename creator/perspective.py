@@ -4,7 +4,7 @@ from fancy import ActionBar, Splitter
 from PyQt4.QtGui import *
 from PyQt4.QtCore import Qt
 from consts import Consts
-from views import ViewManager
+from viewmanager import ViewManager
 import creator_rc
 
 class Perspective:
