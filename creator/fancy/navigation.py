@@ -52,8 +52,8 @@ class NavigationSub(QWidget):
     def __init__(self, factory, parent = None):
         super(NavigationSub, self).__init__(parent)
         self._navigationComboBox = ComboBox(self)
-        self._navigationComboBox.addItem('test')
-        self._navigationComboBox.addItem(u'测试')
+        for name in factory.getViewNames():
+            self._navigationComboBox.addItem(unicode(name))
         self._toolBar = StyledBar(self)
         self._widget = QWidget(self)
         toolBarLayout = QHBoxLayout()
@@ -83,8 +83,9 @@ class NavigationSub(QWidget):
     
         QObject.connect(splitAction, SIGNAL('clicked()'), self, SIGNAL('splitMe()'))
         QObject.connect(close, SIGNAL('clicked()'), self, SIGNAL('closeMe()'))
-        QObject.connect(self._navigationComboBox, SIGNAL('currentIndexChanged(int)'),
+        QObject.connect(self._navigationComboBox, SIGNAL('activated(int)'),
                 self.setCurrentIndex)
+        self.setCurrentIndex(0)
     
     def setCurrentIndex(self, index):
         navigationWidget = self.factory.getSubWidget(index)

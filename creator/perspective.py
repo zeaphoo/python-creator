@@ -6,6 +6,7 @@ from PyQt4.QtCore import Qt
 from consts import Consts
 from viewmanager import ViewManager
 import creator_rc
+import app
 
 class Perspective:
     def __init__(self, window, modeStack):
@@ -13,6 +14,7 @@ class Perspective:
         self._modeStack = modeStack
         self._actionBar = ActionBar(modeStack)
         self._viewmanager = ViewManager()
+        app.views = self._viewmanager
         self._modeStack.addCornerWidget(self._actionBar)
         self._initUi()
     
@@ -42,14 +44,13 @@ class EditPerspective:
         splitter = Splitter()
         splitter.setOrientation(Qt.Vertical)
         splitter.insertWidget(0, self._views.getView('editor'))
-        splitter.insertWidget(1, self._views.getView('output'))
-        splitter.setStretchFactor(0, 3)
-        splitter.setStretchFactor(1, 0)
+        #splitter.insertWidget(1, self._views.getView('output'))
+        splitter.setStretchFactor(0, 4)
         
         self._splitter.insertWidget(0, self._views.getView('navigation'))
         self._splitter.insertWidget(1, splitter)
         self._splitter.setStretchFactor(0, 0)
-        self._splitter.setStretchFactor(1, 1)
+        self._splitter.setStretchFactor(1, 2)
         
     def getWidget(self):
         return self._splitter

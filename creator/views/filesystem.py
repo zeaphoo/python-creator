@@ -3,6 +3,7 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import os.path
+from creator import app
 
 class FileSystemModel(QDirModel):
     def __init__(self, parent=None):
@@ -53,5 +54,6 @@ class FileSystemView(QTreeView):
                 
     def open(self, name):
         fname = unicode(name)
-        ext = os.path.splitext(fname)[1]
-        print 'ext', ext
+        ed = app.views.getView('editor')
+        if ed is QWidget: return
+        ed.openFile(fname)
