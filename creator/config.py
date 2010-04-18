@@ -129,3 +129,13 @@ def set_font(font, section, option=None):
     CONF.set(section, option+'/italic', int(font.italic()))
     CONF.set(section, option+'/bold', int(font.bold()))
     FONT_CACHE[(section, option)] = font
+    
+SUPPORTED_EXT = ['.py', '.pyw', '.txt', '.xml', '.htm', '.html', '.js',
+                 '.diff', '.patch', '.rej', '.css', '.h', '.c', '.cpp', '.hpp',
+                 '.cxx', '.hxx', '.bat', '.cmd', '.properties', '.ini', '.java',
+                 '.lua', '.yaml', '.sql', '.js']
+def support_file(filepath):
+    ext = os.path.splitext(filepath)[1]
+    if ext.lower() in SUPPORTED_EXT:
+        return True
+    return False

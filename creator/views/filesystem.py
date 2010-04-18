@@ -4,6 +4,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import os.path
 from creator import app
+from creator.config import support_file
 
 class FileSystemModel(QDirModel):
     def __init__(self, parent=None):
@@ -54,6 +55,12 @@ class FileSystemView(QTreeView):
                 
     def open(self, name):
         fname = unicode(name)
+        if not support_file(name):
+            if os.name == 'nt':
+                QDesktopServices.openUrl(QUrl('file:///'+name))
+            else:
+                QDesktopServices.openUrl(QUrl('file://'+name))
+            return
         ed = app.views.getView('editor')
         if ed is QWidget: return
         ed.openFile(fname)
