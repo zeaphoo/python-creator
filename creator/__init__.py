@@ -6,11 +6,12 @@ Created on Sun Oct 18 09:58:23 2009
 """
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import *
-from PyQt4.QtCore import QObject, QVariant, SIGNAL, QString
+from PyQt4.QtCore import QObject, QVariant, SIGNAL, QString, QSize, QPoint
 from PyQt4.QtCore import Qt
 from fancy import Splitter, TabWidget
 from PyQt4.QtGui import *
 from perspective import Perspective
+from config import CONF
 
 class MainWindow(QtGui.QMainWindow):
     def __init__(self):
@@ -24,7 +25,36 @@ class MainWindow(QtGui.QMainWindow):
         self.modeStack = TabWidget(self)
         self.perspective = Perspective(self, self.modeStack)
         self.setCentralWidget(self.modeStack)
+    
+    def setup(self):
+        prefix = 'window/'
+        width, height = CONF.get('main', prefix+'size')
+        self.resize( QSize(width, height) )
+        posx, posy = CONF.get('main', prefix+'position')
+        self.move( QPoint(posx, posy) )
+        # Is maximized?
+        if CONF.get('main', prefix+'is_maximized'):
+            self.setWindowState(Qt.WindowMaximized)
+        # Is fullscreen?
+        if CONF.get('main', prefix+'is_fullscreen'):
+            self.setWindowState(Qt.WindowFullScreen)
         
+    def closing(self):
+        prefix = 'window'
+        size = self.size()
+        CONF.set('main', prefix+'/size', (size.width(), size.height()))
+        CONF.set('main', prefix+'/is_maximized', self.isMaximized())
+        CONF.set('main', prefix+'/is_fullscreen', self.isFullScreen())
+        pos = self.pos()
+        CONF.set('main', prefix+'/position', (pos.x(), pos.y()))
+        
+    def resizeEvent(self, event):
+        QMainWindow.resizeEvent(self, event)
+    
+    def closeEvent(self, event):
+        self.closing()
+        event.accept()
+            
     def buildMenus(self):
         from menus import menus
         for m in menus:
@@ -62,3 +92,4 @@ class MainWindow(QtGui.QMainWindow):
         QApplication.closeAllWindows()
         QApplication.processEvents()
         QApplication.exit()
+        

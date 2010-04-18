@@ -23,7 +23,7 @@ DEFAULTS = [
             ('main',
              {
               'translation': True,
-              'window/size' : (1260, 700),
+              'window/size' : (800, 600),
               'window/is_maximized' : False,
               'window/is_fullscreen' : False,
               'window/position' : (10, 10),
