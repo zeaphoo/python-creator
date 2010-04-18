@@ -41,12 +41,13 @@ class MainWindow(QtGui.QMainWindow):
         
     def closing(self):
         prefix = 'window'
-        size = self.size()
-        CONF.set('main', prefix+'/size', (size.width(), size.height()))
         CONF.set('main', prefix+'/is_maximized', self.isMaximized())
         CONF.set('main', prefix+'/is_fullscreen', self.isFullScreen())
-        pos = self.pos()
-        CONF.set('main', prefix+'/position', (pos.x(), pos.y()))
+        if not self.isMaximized() and not self.isFullScreen():
+            size = self.size()
+            CONF.set('main', prefix+'/size', (size.width(), size.height()))
+            pos = self.pos()
+            CONF.set('main', prefix+'/position', (pos.x(), pos.y()))
         
     def resizeEvent(self, event):
         QMainWindow.resizeEvent(self, event)
