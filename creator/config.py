@@ -19,6 +19,8 @@ MONOSPACE = ['Monospace', 'DejaVu Sans Mono', 'Courier New',
 MEDIUM = 11
 SMALL = 9
 
+App_Name = 'Creator'
+
 DEFAULTS = [
             ('main',
              {

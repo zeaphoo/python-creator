@@ -28,7 +28,7 @@ class CodeEditor(QsciScintilla):
               ('yaml'): (QsciLexerYAML, ''),
               ('sql'): (QsciLexerSQL, ''),
               ('js'): (QsciLexerJavaScript, '//'),
-              }
+            }
     TAB_ALWAYS_INDENTS = ('py', 'pyw', 'python', 'c', 'cpp', 'h')
     OCCURENCE_INDICATOR = QsciScintilla.INDIC_CONTAINER
     EOL_MODES = {"\r\n": QsciScintilla.EolWindows,
@@ -37,12 +37,19 @@ class CodeEditor(QsciScintilla):
     def __init__(self, parent=None):
         super(CodeEditor, self).__init__(parent)
         self.setup()
+        self.SendScintilla(QsciScintilla.SCI_INDICSETSTYLE,
+                           self.OCCURENCE_INDICATOR,
+                           QsciScintilla.INDIC_BOX)
+        self.SendScintilla(QsciScintilla.SCI_INDICSETFORE,
+                           self.OCCURENCE_INDICATOR,
+                           0x4400FF)
         
     
     def setup(self):
         """Configure Scintilla"""
         # UTF-8
         self.setUtf8(True)
+        self.SendScintilla(QsciScintilla.SCI_SETSCROLLWIDTHTRACKING, True)
         
         # Indentation
         self.setAutoIndent(True)
@@ -51,10 +58,17 @@ class CodeEditor(QsciScintilla):
         self.setTabIndents(True)
         self.setBackspaceUnindents(True)
         self.setTabWidth(4)
+        # Indentation
+        self.setIndentationGuides(True)
+        self.setIndentationGuidesForegroundColor(Qt.lightGray)
         
         # Enable brace matching
         self.setBraceMatching(QsciScintilla.SloppyBraceMatch)
         self.setMatchedBraceBackgroundColor(Qt.yellow)
+        
+        self.setEdgeColumn(80)
+        self.setEdgeMode(QsciScintilla.EdgeLine)
+        self.setWrapVisualFlags(QsciScintilla.WrapFlagByBorder)
     
     def setup_editor(self, linenumbers=True, language=None,
                      code_analysis=False, code_folding=False,
@@ -158,3 +172,34 @@ class CodeEditor(QsciScintilla):
         """Update margin width"""
         width = log(self.lines(), 10) + 2
         self.setMarginWidth(1, QString('0'*int(width)))
+        
+    def set_whitespace_visible(self, state):
+        """Show/hide whitespace"""
+        if state:
+            self.setWhitespaceVisibility(QsciScintilla.WsVisible)
+        else:
+            self.setWhitespaceVisibility(QsciScintilla.WsInvisible)
+    
+    def set_eol_chars_visible(self, state):
+        """Show/hide EOL characters"""
+        self.setEolVisibility(state)
+    
+    def paste(self):
+        """
+        Reimplement QsciScintilla's method to fix the following issue:
+        on Windows, pasted text has only 'LF' EOL chars even if the original
+        text has 'CRLF' EOL chars
+        """
+        clipboard = QApplication.clipboard()
+        text = unicode(clipboard.text())
+        if len(text.splitlines()) > 1:
+            eol_chars = self.get_line_separator()
+            clipboard.setText( eol_chars.join((text+eol_chars).splitlines()) )
+        # Standard paste
+        QsciScintilla.paste(self)
+    
+    def highlight_line(self, line):
+        """Highlight line number *line*"""
+        text = unicode(self.text(line-1)).rstrip()
+        self.setSelection(line-1, len(text), line-1, 0)
+        self.ensureLineVisible(line-1)

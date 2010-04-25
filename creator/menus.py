@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 menus = [
-    { 'text': 'File',
+    { 'text': 'Creator',
       'menus': ['file_new', 'file_open', 'separator', 'file_exit']    
     },
-    { 'text': 'Edit',
+    { 'text': 'Editor',
       'menus': []    
     },
-    { 'text': 'Search',
+    { 'text': 'Source',
       'menus': []    
     },
     { 'text': 'Help',

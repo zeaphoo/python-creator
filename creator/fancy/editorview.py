@@ -6,7 +6,7 @@ from button import ToolButton
 from combobox import ComboBox
 import os
 import fancy_rc
-from creator.utils import encoding
+from creator.utils import encoding, random_key
 
 class EditorView(QWidget):
     def __init__(self, parent = None, editorWidget = None):
@@ -81,6 +81,18 @@ class EditorView(QWidget):
             self.setup_editor(linenumbers=True, language=self._guessLanguage(filepath),
                                 code_folding=True)
             self._navigationComboBox.setCurrentIndex(self._navigationComboBox.count()-1)
+    
+    def newFile(self, title, content, language):
+        name = title
+        filepath = 'tmp:///'+ random_key() + '/'+title
+        w = self._viewFactory(self._stack)
+        self._pathWidgets[filepath] = w
+        self._widget = w
+        self._stack.addWidget(w)
+        self._navigationComboBox.addItem(name, QVariant(filepath))
+        self.setText(unicode(content))
+        self.setup_editor(linenumbers=True, language=language, code_folding=True)
+        self._navigationComboBox.setCurrentIndex(self._navigationComboBox.count()-1)
     
     def _guessLanguage(self, filepath):
         ext = os.path.splitext(filepath)[1]

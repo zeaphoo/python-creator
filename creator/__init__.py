@@ -11,11 +11,12 @@ from PyQt4.QtCore import Qt
 from fancy import Splitter, TabWidget
 from PyQt4.QtGui import *
 from perspective import Perspective
-from config import CONF
+from config import CONF, App_Name
 
 class MainWindow(QtGui.QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
+        self.setWindowTitle(App_Name)
         self._menubar = QtGui.QMenuBar(self)
         self._actions = {}
         self._handlers = {}
@@ -67,6 +68,8 @@ class MainWindow(QtGui.QMainWindow):
                 else:
                     filem.addAction(self._actions[a])
         self.registerHandler('file_exit', self.exit)
+        self.registerHandler('file_new', self.newFile)
+        self.registerHandler('file_open', self.openFile)
         
     def buildActions(self):
         from actions import actions
@@ -93,4 +96,11 @@ class MainWindow(QtGui.QMainWindow):
         QApplication.closeAllWindows()
         QApplication.processEvents()
         QApplication.exit()
+    
+    def newFile(self):
+        ed = app.views.getView('editor')
+        if ed is QWidget: return
+        ed.newFile('untitiled.py', '# -*- coding: utf-8 -*-\n', 'py')
         
+    def openFile(self):
+        pass
