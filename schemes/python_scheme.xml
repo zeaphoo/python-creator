@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE HighlighterScheme>
+<!-- Remember these escape chars in XML
+&lt; 	< 	less than
+&gt; 	> 	greater than
+&amp; 	& 	ampersand 
+&apos; 	' 	apostrophe
+&quot; 	" 	quotation mark
+&lt;b&gt;
+ -->
+<SyntaxScheme>
+<!-- Scheme part-->
+
+<scheme name="Python" extensions="py;pyw">
+
+    <context id="string/triplesimple" format="string" >
+        <start>'''</start>
+        <stop>'''</stop>
+        <escape>\\</escape>
+    </context>
+
+    <context id="string/tripledouble" format="string/double" >
+        <start>"""</start>
+        <stop>"""</stop>
+        <escape>\\</escape>
+    </context>
+
+    <words id="keyword" format="keyword0">class def</words>
+
+    <words id="keyword" format="keyword1">and as assert break continue del elif else except exec finally for from global if import in is lambda not or pass print raise return self try while with yield True False</words>
+
+    <words id="keyword" format="keyword2">abs all any basestring bool callable chr classmethod cmp compile complex delattr dict dir divmod enumerate eval execfile exit file filter float frozenset getattr globals hasattr hex id int isinstance issubclass iter len list locals long map max min object oct open ord pow property range reduce repr reversed round set setattr slice sorted staticmethod str sum super tuple type unichr unicode vars xrange zip</words>
+
+    <words id="keyword" format="keyword3">array bisect bsddb bz2 codecs collections copy datetime decimal functools getopt gzip heapq itertools math optparse os os.path pickle cPickle random re string StringIO cStringIO struct subprocess sys tarfile time unicodedata weakref zipfile</words>
+
+
+    <word id="numbers" format="numbers">\b\d+\b</word>
+    <word id="comment" format="comment" comment="true" not_in="'">#</word>
+    <word id="decoration" format="deco0">@\w+</word>
+    <word id="string/simple" format="string/simple" mini="true">(?:'[^']*'|"[^"]*")</word>
+    <word id="decoration" format="deco1">[\(|\)|\[|\]|\{|\}]</word>
+    <word id="decoration" format="deco2">[=|;|\:|\+|-|\*|/|\.]</word>
+    <word id="keyword" format="keyword4">\s+\w+(?=\(.*\):)</word>
+</scheme>
+
+</SyntaxScheme>

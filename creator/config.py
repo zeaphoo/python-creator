@@ -32,15 +32,12 @@ DEFAULTS = [
               'lightwindow/size' : (650, 400),
               'lightwindow/position' : (30, 30),
               }),
-            ('scintilla',
+            ('editor',
              {
               'margins/backgroundcolor' : 'white',
               'margins/foregroundcolor' : 'darkGray',
               'foldmarginpattern/backgroundcolor' : 0xEEEEEE,
               'foldmarginpattern/foregroundcolor' : 0xEEEEEE,
-              }),
-            ('editor',
-             {
               'printer_header/font/family': SANS_SERIF,
               'printer_header/font/size': MEDIUM,
               'printer_header/font/italic': False,

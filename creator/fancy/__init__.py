@@ -14,3 +14,4 @@ from statusbar import StatusBar
 from navigation import Navigation
 from combobox import ComboBox
 from editorview import EditorView
+from syntaxeditor import SyntaxEditor
