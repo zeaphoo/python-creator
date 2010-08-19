@@ -100,7 +100,18 @@ class MainWindow(QtGui.QMainWindow):
     def newFile(self):
         ed = app.views.getView('editor')
         if ed is QWidget: return
-        ed.newFile('untitiled.py', '# -*- coding: utf-8 -*-\n', 'py')
+        ed.newFile('untitiled.py', '#!/usr/bin/python\n# -*- coding: utf-8 -*-\n', 'py')
         
     def openFile(self):
         pass
+
+def main():
+    import sys
+    app = QtGui.QApplication(sys.argv)
+    window = MainWindow()
+    window.setup()
+    window.show()
+    sys.exit(app.exec_())
+
+if __name__=="__main__":
+    main()

@@ -4,7 +4,13 @@ import glob
 import xml.etree.cElementTree as ET
 from PyQt4 import QtCore, QtGui
 
-SYNTAXES = os.path.join(os.getcwd(), 'schemes/')
+_verifypaths = lambda *paths: filter(os.path.exists, paths)[0]
+SYNTAXES = _verifypaths(
+        os.path.join(os.getcwd(), 'schemes/'),
+        '/opt/python-creator/schemes',
+        '/usr/local/share/python-creator/schemes',
+        '/usr/share/python-creator/schemes',
+        )
 
 def getNameExtensionsDic(motif='*_scheme.xml',
                         chemin_rech = SYNTAXES,

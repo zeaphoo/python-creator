@@ -77,7 +77,8 @@ DEFAULTS = [
             ]
 DEV = False
 CONF = UserConfig('creator', defaults=DEFAULTS, load=(not DEV),
-                  version='0.0.1', subfolder='.creator')
+                  version='0.0.1',
+                  subfolder='.config/creator' if os.name == 'posix' else '.creator')
 
 def font_is_installed(font):
     """Check if font is installed"""

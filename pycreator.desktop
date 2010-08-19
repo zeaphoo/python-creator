@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Python Create
+Comment=Clean python ide inspired by qt creator
+Exec=pycreator %f
+Icon=python
+Terminal=false
+Type=Application
+MimeType=text/x-python
+Categories=GTK;Utility;TextEditor;
