@@ -4,7 +4,7 @@ import string
 from PyQt4 import QtGui, QtCore
 from highlighter import GenericHighlighter
 
-class SyntaxEditor(QtGui.QTextEdit):
+class SyntaxEditor(QtGui.QPlainTextEdit):
     ## CODECS
     _codecs = { "utf8"  : "UTF-8",
                 "CP1252": "Windows-1252",
@@ -12,12 +12,11 @@ class SyntaxEditor(QtGui.QTextEdit):
     _occurences = 0
 
     def __init__(self, parent=None):
-        QtGui.QTextEdit.__init__(self, parent)
+        QtGui.QPlainTextEdit.__init__(self, parent)
         self.parent = parent
         
         ## EXTENSION MANAGEMENT
         self.default_extension = '.py'
-        self.setAcceptRichText(False)
         
         #self.doc = QtGui.QTextDocument(self)
         self.tab_long = 4
@@ -51,6 +50,13 @@ class SyntaxEditor(QtGui.QTextEdit):
         self.connect( self,
                     QtCore.SIGNAL( "textChanged()" ),
                     QtCore.SLOT("update()") )
+    
+    def setText(self, text):
+        return self.setPlainText(text)
+        
+    def getText(self):
+        return unicdoe(self.toPlainText())
+        
     ## =========================
     ## Contexts management
     ## =========================
@@ -179,7 +185,8 @@ class SyntaxEditor(QtGui.QTextEdit):
         if self.highlighter :
             self.highlighter.changeRules(lang)
         else:
-            self.highlighter = GenericHighlighter(self, lang)
+            self.highlighter = GenericHighlighter(self.document(), lang)
+            print 'highlighter', self.highlighter
         self.highlighter.rehighlight()
 
     ## ======================================== Settings
@@ -235,7 +242,6 @@ class SyntaxEditor(QtGui.QTextEdit):
         font.setFamily(fontfam)
         font.setPointSize(fontsize)
         self.setFont(font)
-        self.setAcceptRichText(False)
 #        if self.highlighter :
 #            self.parent.lines.fg_color = QtGui.QColor(lfgcolor)
 #            self.parent.lines.applyBackgroundColor(QtGui.QColor(lbgcolor))
@@ -272,5 +278,5 @@ class SyntaxEditor(QtGui.QTextEdit):
         if self.paint_callbacks :
             for pc in self.paint_callbacks:
                 pc.paint(event)
-        QtGui.QTextEdit.paintEvent(self,event)
+        QtGui.QPlainTextEdit.paintEvent(self,event)
     
