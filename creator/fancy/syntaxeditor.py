@@ -3,6 +3,9 @@ import os
 import string
 from PyQt4 import QtGui, QtCore
 from highlighter import GenericHighlighter
+from editdecorator import EdgeLine
+from PyQt4.QtCore import QRect
+from PyQt4.QtGui import QPainter
 
 class SyntaxEditor(QtGui.QPlainTextEdit):
     ## CODECS
@@ -18,6 +21,7 @@ class SyntaxEditor(QtGui.QPlainTextEdit):
         ## EXTENSION MANAGEMENT
         self.default_extension = '.py'
         
+        self.edge_line = EdgeLine(self)
         #self.doc = QtGui.QTextDocument(self)
         self.tab_long = 4
         self.setTabEditorWidth(self.tab_long)
@@ -279,4 +283,10 @@ class SyntaxEditor(QtGui.QPlainTextEdit):
             for pc in self.paint_callbacks:
                 pc.paint(event)
         QtGui.QPlainTextEdit.paintEvent(self,event)
-    
+        
+    def viewportEvent(self, event):
+        cr = self.contentsRect()
+        x = self.blockBoundingGeometry(self.firstVisibleBlock()).left() \
+            +self.fontMetrics().width('9')*self.edge_line.column+5
+        self.edge_line.setGeometry(QRect(x, cr.top(), 1, cr.bottom()))
+        return super(SyntaxEditor, self).viewportEvent(event)
