@@ -7,51 +7,38 @@ from consts import Consts
 from viewmanager import ViewManager
 import creator_rc
 import app
+from fancy import Splitter, TabWidget
 
 class Perspective:
-    def __init__(self, window, modeStack):
+    def __init__(self, window):
         self._window = window
-        self._modeStack = modeStack
-        self._actionBar = ActionBar(modeStack)
+        self._panel = TabWidget(self._window)
+        self._actionBar = ActionBar(self._panel)
         self._viewmanager = ViewManager()
         app.views = self._viewmanager
-        self._modeStack.addCornerWidget(self._actionBar)
+        self._panel.addCornerWidget(self._actionBar)
         self._initUi()
+        self._window.setCentralWidget(self._panel)
     
     def _initUi(self):
-        self._editPerspective = EditPerspective(self._viewmanager)
-        # init all perpective views
-        self._modeStack.insertTab(0, self._editPerspective.getWidget(), QIcon(Consts.icon_perspective_edit), 'Edit')
-        self._modeStack.insertTab(1, QWidget(), QIcon(Consts.icon_perspective_debug), 'Debug')
-        self._modeStack.insertTab(2, QWidget(), QIcon(Consts.icon_perspective_output), 'Output')
-        # init global action
-        #actDebug = QAction(QIcon(Consts.icon_debug), 'Debug', None)
-        #self.addAction(0, actDebug)
-        actRunSection = QAction(QIcon(Consts.icon_run_section), 'Run Selected Code', None)
-        self.addAction(0, actRunSection)
-        actRun = QAction(QIcon(Consts.icon_run), 'Run', None)
-        self.addAction(0, actRun)
-        
-    def addAction(self, pos, action):
-        self._actionBar.insertAction(pos, action)
-        
-
-class EditPerspective:
-    def __init__(self, appviews):
-        self._views = appviews
         self._splitter = Splitter()
         
         splitter = Splitter()
         splitter.setOrientation(Qt.Vertical)
-        splitter.insertWidget(0, self._views.getView('editor'))
-        #splitter.insertWidget(1, self._views.getView('output'))
+        splitter.insertWidget(0, self._viewmanager.getView('editor'))
         splitter.setStretchFactor(0, 4)
         
-        self._splitter.insertWidget(0, self._views.getView('navigation'))
+        self._splitter.insertWidget(0, self._viewmanager.getView('navigation'))
         self._splitter.insertWidget(1, splitter)
         self._splitter.setStretchFactor(0, 0)
         self._splitter.setStretchFactor(1, 2)
         
-    def getWidget(self):
-        return self._splitter
+        # init all perpective views
+        self._panel.insertTab(0, self._splitter, QIcon(Consts.icon_perspective_edit), 'Edit')
+        # init global action
+        #actRun = QAction(QIcon(Consts.icon_run), 'Run', None)
+        #self.addAction(0, actRun)
+        
+    def addAction(self, pos, action):
+        self._actionBar.insertAction(pos, action)
         

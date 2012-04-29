@@ -8,7 +8,6 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import *
 from PyQt4.QtCore import QObject, QVariant, SIGNAL, QString, QSize, QPoint
 from PyQt4.QtCore import Qt
-from fancy import Splitter, TabWidget
 from PyQt4.QtGui import *
 from perspective import Perspective
 from config import CONF, App_Name
@@ -23,9 +22,7 @@ class MainWindow(QtGui.QMainWindow):
         self.buildActions()
         self.buildMenus()
         self.setMenuBar(self._menubar)
-        self.modeStack = TabWidget(self)
-        self.perspective = Perspective(self, self.modeStack)
-        self.setCentralWidget(self.modeStack)
+        self.perspective = Perspective(self)
     
     def setup(self):
         prefix = 'window/'
