@@ -50,12 +50,6 @@ class SyntaxEditor(QtGui.QPlainTextEdit):
         # for paintEvent
         self.verticalScrollBar().valueChanged.connect(self.update)
         self.textChanged.connect(self.update)
-        #self.connect( self.verticalScrollBar(),
-        #            QtCore.pyqtSignal( "valueChanged(int)" ),
-        #            QtCore.pyqtSlot("update()") )
-        #self.connect( self,
-        #            QtCore.pyqtSignal( "textChanged()" ),
-        #            QtCore.pyqtSlot("update()") )
     
     def setText(self, text):
         return self.setPlainText(text)

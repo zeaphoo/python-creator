@@ -7,4 +7,4 @@ Created on Sat Oct 17 16:08:41 2009
 """
 
 from base import ToolButton, ComboBox, Splitter, StatusBar
-from custom import EdgeLine, StyledBar, View
+from custom import EdgeLine, StyledBar, VerticalSplitView

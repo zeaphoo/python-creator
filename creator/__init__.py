@@ -54,7 +54,7 @@ class MainWindow(QtGui.QMainWindow):
         event.accept()
             
     def buildMenus(self):
-        from menus import menus
+        from app import menus
         for m in menus:
             text = m['text']
             filem = self._menubar.addMenu(text)
@@ -68,7 +68,7 @@ class MainWindow(QtGui.QMainWindow):
         self.registerHandler('file_open', self.openFile)
         
     def buildActions(self):
-        from actions import actions
+        from app import actions
         for key, value in actions.items():
             a = QAction(value['text'], self)
             a.setShortcut(QKeySequence(value['shortcut']))

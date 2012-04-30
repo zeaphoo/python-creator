@@ -1,11 +1,33 @@
 # -*- coding: utf-8 -*-
 from PyQt4.QtGui import *
 from PyQt4.QtCore import Qt
-from app import Consts
-from viewmanager import ViewManager
-import creator_rc
 import app
-from fancy import Splitter, StatusBar
+from fancy import Splitter, StatusBar, VerticalSplitView
+from editor import EditorView
+from views import FileSystemView
+        
+class ViewManager:
+    def __init__(self):
+        self._views = {}
+        self._factorys = {}
+        self._initViews()
+    
+    def _initViews(self):
+        self._views['filesystem'] = FileSystemView()
+        self._views['editor'] = EditorView(None)
+        
+    def getView(self, name):
+        if not self._views.has_key(name):
+            return QWidget()
+        return self._views[name]
+        
+    def registerView(self, name, view):
+        if self._views.has_key(name):
+            return
+        self._views[name] = view
+        
+    def registerFactory(self, name, factory):
+        return
 
 class Perspective:
     def __init__(self, window):
@@ -24,7 +46,11 @@ class Perspective:
         splitter.insertWidget(0, self._viewmanager.getView('editor'))
         splitter.setStretchFactor(0, 4)
         
-        self._splitter.insertWidget(0, self._viewmanager.getView('navigation'))
+        siderview = VerticalSplitView()
+        siderview.initView([('filesystem', FileSystemView)],
+                            showdefault = True)
+        
+        self._splitter.insertWidget(0, siderview)
         self._splitter.insertWidget(1, splitter)
         self._splitter.setStretchFactor(0, 0)
         self._splitter.setStretchFactor(1, 2)
