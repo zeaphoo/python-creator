@@ -1,24 +1,20 @@
 # -*- coding: utf-8 -*-
-
-from fancy import ActionBar, Splitter
 from PyQt4.QtGui import *
 from PyQt4.QtCore import Qt
-from consts import Consts
+from app import Consts
 from viewmanager import ViewManager
 import creator_rc
 import app
-from fancy import Splitter, TabWidget
+from fancy import Splitter, StatusBar
 
 class Perspective:
     def __init__(self, window):
         self._window = window
-        self._panel = TabWidget(self._window)
-        self._actionBar = ActionBar(self._panel)
+        self._stage = QWidget()
         self._viewmanager = ViewManager()
         app.views = self._viewmanager
-        self._panel.addCornerWidget(self._actionBar)
         self._initUi()
-        self._window.setCentralWidget(self._panel)
+        self._window.setCentralWidget(self._stage)
     
     def _initUi(self):
         self._splitter = Splitter()
@@ -33,12 +29,15 @@ class Perspective:
         self._splitter.setStretchFactor(0, 0)
         self._splitter.setStretchFactor(1, 2)
         
-        # init all perpective views
-        self._panel.insertTab(0, self._splitter, QIcon(Consts.icon_perspective_edit), 'Edit')
-        # init global action
-        #actRun = QAction(QIcon(Consts.icon_run), 'Run', None)
-        #self.addAction(0, actRun)
+        self._statusBar = StatusBar()
+        self._statusBar.setSizeGripEnabled(False)
+        self._statusBar.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Fixed)
         
-    def addAction(self, pos, action):
-        self._actionBar.insertAction(pos, action)
+        vlayout = QVBoxLayout()
+        vlayout.setMargin(0)
+        vlayout.setSpacing(0)
+        vlayout.addWidget(self._splitter)
+        vlayout.addWidget(self._statusBar)
+        
+        self._stage.setLayout(vlayout)
         

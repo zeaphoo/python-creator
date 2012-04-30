@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from PyQt4 import QtGui
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from theme import theme
@@ -8,12 +8,15 @@ import fancy_rc
 
 class FancyStyle:
     def __init__(self):
-        self.style = QApplication.style
         self.lineeditImage = QImage(":/fancy/images/inputfield.png");
         self.lineeditImage_disabled = QImage(":/fancy/images/inputfield_disabled.png");
     
+    @property
+    def style(self):
+        return QtGui.QApplication.instance().style()
+        
     def pixelMetric(self, metric, option = None, widget = None):
-        retval = self.style().pixelMetric(metric, option, widget)
+        retval = self.style.pixelMetric(metric, option, widget)
         if metric == QStyle.PM_ButtonShiftHorizontal or metric == QStyle.PM_ButtonShiftVertical:
             retval = 0
         return retval
@@ -123,7 +126,7 @@ class FancyStyle:
     def draw_ComboBox(self, option, painter, widget):
         painter.save()
         rect = option.rect
-        isEmpty = option.currentText.isEmpty() and option.currentIcon.isNull()
+        isEmpty = not option.currentText
         reverse = option.direction == Qt.RightToLeft
         
         grad = QLinearGradient(QPointF(option.rect.topRight()), QPointF(option.rect.bottomRight()))
@@ -155,15 +158,15 @@ class FancyStyle:
         right = rect.right() if not reverse else rect.left() + menuButtonWidth
         arrowRect = QRect((left + right) / 2 + ( 6 if reverse else -6), rect.center().y() - 3, 9, 9)
         if option.state & QStyle.State_On:
-            arrowRect.translate(self.style().pixelMetric(QStyle.PM_ButtonShiftHorizontal, option, widget),
-                                self.style().pixelMetric(QStyle.PM_ButtonShiftVertical, option, widget))
+            arrowRect.translate(self.style.pixelMetric(QStyle.PM_ButtonShiftHorizontal, option, widget),
+                                self.style.pixelMetric(QStyle.PM_ButtonShiftVertical, option, widget))
 
         arrowOpt = QStyleOption(option)
         arrowOpt.rect = arrowRect
         if isEmpty:
             arrowOpt.state &= ~(QStyle.State_Enabled | QStyle.State_Sunken)
             
-        if self.style().styleHint(QStyle.SH_ComboBox_Popup, option, widget):
+        if self.style.styleHint(QStyle.SH_ComboBox_Popup, option, widget, None):
             arrowOpt.rect.translate(0, -3)
             self.draw_IndicatorArrowUp(arrowOpt, painter, widget)
             arrowOpt.rect.translate(0, 6)
@@ -173,7 +176,7 @@ class FancyStyle:
         painter.restore()
     
     def draw_ComboBoxLabel(self, option, painter, widget):
-        editRect = self.style().subControlRect(QStyle.CC_ComboBox, option, QStyle.SC_ComboBoxEditField, widget)
+        editRect = self.style.subControlRect(QStyle.CC_ComboBox, option, QStyle.SC_ComboBoxEditField, widget)
         customPal = option.palette
 
         if not option.currentIcon.isNull():
@@ -186,7 +189,7 @@ class FancyStyle:
                                    iconRect.size(), editRect)
             if option.editable:
                 painter.fillRect(iconRect, customPal.brush(QPalette.Base))
-            self.style().drawItemPixmap(painter, iconRect, Qt.AlignCenter, pixmap)
+            self.style.drawItemPixmap(painter, iconRect, Qt.AlignCenter, pixmap)
             
             if option.direction == Qt.RightToLeft:
                 editRect.translate(-4 - option.iconSize.width(), 0)
@@ -197,20 +200,20 @@ class FancyStyle:
         customPal.setBrush(QPalette.All, QPalette.ButtonText, QColor(0, 0, 0, 70))
 
         text = option.fontMetrics.elidedText(option.currentText, Qt.ElideRight, editRect.width())
-        self.style().drawItemText(painter, editRect.translated(0, 1),
-                     self.style().visualAlignment(option.direction, Qt.AlignLeft | Qt.AlignVCenter),
+        self.style.drawItemText(painter, editRect.translated(0, 1),
+                     self.style.visualAlignment(option.direction, Qt.AlignLeft | Qt.AlignVCenter),
                      customPal, option.state & QStyle.State_Enabled, text, QPalette.ButtonText)
         customPal.setBrush(QPalette.All, QPalette.ButtonText, theme.panelTextColor)
-        self.style().drawItemText(painter, editRect,
-                     self.style().visualAlignment(option.direction, Qt.AlignLeft | Qt.AlignVCenter),
+        self.style.drawItemText(painter, editRect,
+                     self.style.visualAlignment(option.direction, Qt.AlignLeft | Qt.AlignVCenter),
                      customPal, option.state & QStyle.State_Enabled, text, QPalette.ButtonText)
         
         
     def draw_ToolButton(self, option, painter, widget):
         rect = option.rect
-        btnRect = self.style().subControlRect(QStyle.CC_ToolButton, option,
+        btnRect = self.style.subControlRect(QStyle.CC_ToolButton, option,
                                         QStyle.SC_ToolButton, widget)
-        menuRect = self.style().subControlRect(QStyle.CC_ToolButton, option,
+        menuRect = self.style.subControlRect(QStyle.CC_ToolButton, option,
                                         QStyle.SC_ToolButtonMenu, widget)
         
         bflags = option.state
@@ -252,7 +255,7 @@ class FancyStyle:
         label.palette = self.panelPalette(option.palette)
         fw = self.pixelMetric(QStyle.PM_DefaultFrameWidth, option, widget)
         label.rect = btnRect.adjusted(fw, fw, -fw, -fw)
-        self.style().drawControl(QStyle.CE_ToolButtonLabel, label, painter, widget)
+        self.style.drawControl(QStyle.CE_ToolButtonLabel, label, painter, widget)
             
         if option.subControls & QStyle.SC_ToolButtonMenu:
             tool.state = mflags
@@ -297,5 +300,5 @@ class FancyStyle:
             painter.setPen(QPen(hover, 1))
             painter.drawRect(option.rect.adjusted(1, 1, -2 ,-2))
         painter.restore()
-        
+    
 fancystyle = FancyStyle()

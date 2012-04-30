@@ -3,7 +3,7 @@ import os
 import string
 from PyQt4 import QtGui, QtCore
 from highlighter import GenericHighlighter
-from editdecorator import EdgeLine
+from creator.fancy import EdgeLine
 from PyQt4.QtCore import QRect
 from PyQt4.QtGui import QPainter
 
@@ -48,12 +48,14 @@ class SyntaxEditor(QtGui.QPlainTextEdit):
         self.applyDefaultSettings()
         ## SIGNALS-SLOTS
         # for paintEvent
-        self.connect( self.verticalScrollBar(),
-                    QtCore.SIGNAL( "valueChanged(int)" ),
-                    QtCore.SLOT("update()") )
-        self.connect( self,
-                    QtCore.SIGNAL( "textChanged()" ),
-                    QtCore.SLOT("update()") )
+        self.verticalScrollBar().valueChanged.connect(self.update)
+        self.textChanged.connect(self.update)
+        #self.connect( self.verticalScrollBar(),
+        #            QtCore.pyqtSignal( "valueChanged(int)" ),
+        #            QtCore.pyqtSlot("update()") )
+        #self.connect( self,
+        #            QtCore.pyqtSignal( "textChanged()" ),
+        #            QtCore.pyqtSlot("update()") )
     
     def setText(self, text):
         return self.setPlainText(text)

@@ -150,9 +150,9 @@ def readRulesFromXML(file=None):
             gr = blockContext(getAttributesFrom(element,"stayOnLine", False))
             for child in element:
                 if child.tag == 'start':
-                    gr.start = QtCore.QString(unicode(child.text))
+                    gr.start = unicode(child.text)
                 elif child.tag == 'stop':
-                    gr.stop = QtCore.QString(unicode(child.text))
+                    gr.stop = unicode(child.text)
                     gr.isExclusive = getAttributesFrom(child, "exclusive", True)["exclusive"]
                 elif child.tag == 'escape':
                     gr.escape = child.text
@@ -257,7 +257,7 @@ class GenericHighlighter(QtGui.QSyntaxHighlighter):
             # If not, indexOf will return the same values.
             delta = 0
             if rule.start == rule.stop :
-                delta = rule.stop.length()
+                delta = len(rule.stop)
 
             if self.previousBlockState() != state:
                 startIndex = text.indexOf(rule.start)
@@ -269,15 +269,15 @@ class GenericHighlighter(QtGui.QSyntaxHighlighter):
 
                 if endIndex == -1:
                     self.setCurrentBlockState(state);
-                    ruleLength = text.length() - startIndex;
+                    ruleLength = len(text) - startIndex;
                 else :
-                    ruleLength = endIndex - startIndex + rule.stop.length()
+                    ruleLength = endIndex - startIndex + len(rule.stop)
 
                 self.setFormat(startIndex, ruleLength, format)
                 startIndex = text.indexOf(rule.start,
                                           startIndex + ruleLength)
         for rule in self.cmt_rules:
-            lenrule = rule.start.pattern().length()
+            lenrule = len(rule.start.pattern())
             stack = []
             for i, _ in enumerate(text):
                 c = text[i:i+lenrule]
@@ -287,6 +287,6 @@ class GenericHighlighter(QtGui.QSyntaxHighlighter):
                     else:
                         stack.append(c)
                 elif c == rule.start.pattern() and len(stack) == 0:
-                    self.setFormat(i, text.length(),
+                    self.setFormat(i, len(text),
                                    self.formats[rule.getFormat()])
                     break

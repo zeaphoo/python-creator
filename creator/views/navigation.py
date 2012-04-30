@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-
-from splitter import Splitter
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from styledbar import StyledBar
-from combobox import ComboBox
-from button import ToolButton
+from creator.fancy import Splitter, StyledBar, ComboBox, ToolButton
 
-import fancy_rc
+import creator.fancy.fancy_rc
 
 
 class Navigation(Splitter):
@@ -21,8 +17,8 @@ class Navigation(Splitter):
     
     def insertSub(self, pos):
         ns = NavigationSub(self._factory, self)
-        QObject.connect(ns, SIGNAL('spliteMe()'), self.spliteSub)
-        QObject.connect(ns, SIGNAL('closeMe()'), self.closeSub)
+        ns.splitMe.connect(self.spliteSub)
+        ns.closeMe.connect(self.closeSub)
         self.insertWidget(pos, ns)
         self._subWidgets.insert(pos, ns)
         return ns
@@ -47,8 +43,8 @@ class Navigation(Splitter):
         self.setVisible(show)
 
 class NavigationSub(QWidget):
-    splitMe = SIGNAL('splitMe()')
-    closeMe = SIGNAL('closeMe()')
+    splitMe = pyqtSignal()
+    closeMe = pyqtSignal()
     def __init__(self, factory, parent = None):
         super(NavigationSub, self).__init__(parent)
         self._navigationComboBox = ComboBox(self)
@@ -81,10 +77,9 @@ class NavigationSub(QWidget):
         lay.addWidget(self._toolBar)
         lay.addWidget(self._widget)
     
-        QObject.connect(splitAction, SIGNAL('clicked()'), self, SIGNAL('splitMe()'))
-        QObject.connect(close, SIGNAL('clicked()'), self, SIGNAL('closeMe()'))
-        QObject.connect(self._navigationComboBox, SIGNAL('activated(int)'),
-                self.setCurrentIndex)
+        splitAction.clicked.connect(self.splitMe)
+        close.clicked.connect(self.closeMe)
+        self._navigationComboBox.activated.connect(self.setCurrentIndex)
         self.setCurrentIndex(0)
     
     def setCurrentIndex(self, index):

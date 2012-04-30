@@ -1,20 +1,25 @@
 <RCC>
-    <qresource prefix="/fancy" >
-        <file>images/fancytoolbutton.svg</file>
-        <file>images/mode_Debug.png</file>
-        <file>images/mode_Edit.png</file>
-        <file>images/mode_Output.png</file>
-        <file>images/mode_Project.png</file>
-        <file>images/mode_Reference.png</file>
-	<file>images/closebutton.png</file>
-	<file>images/darkclosebutton.png</file>
-	<file>images/splitbutton_horizontal.png</file>
-	<file>images/inputfield.png</file>
-	<file>images/inputfield_disabled.png</file>
+    <qresource prefix="/fancy">
+        <file>images/closebutton.png</file>
+        <file>images/sidebaricon.png</file>
+        <file>images/statusbar.png</file>
+        <file>images/unlocked.png</file>
+        <file>images/darkclosebutton.png</file>
+        <file>images/splitbutton_horizontal.png</file>
+        <file>images/inputfield.png</file>
+        <file>images/inputfield_disabled.png</file>
         <file>images/panel_button.png</file>
-	<file>images/panel_button_checked.png</file>
-	<file>images/panel_button_checked_hover.png</file>
-	<file>images/panel_button_pressed.png</file>
-	<file>images/panel_button_hover.png</file>
+        <file>images/panel_button_checked.png</file>
+        <file>images/panel_button_checked_hover.png</file>
+        <file>images/panel_button_pressed.png</file>
+        <file>images/panel_button_hover.png</file>
+        <file>images/empty14.png</file>
+        <file>images/extension.png</file>
+        <file>images/linkicon.png</file>
+        <file>images/locked.png</file>
+        <file>images/magnifier.png</file>
+        <file>images/pushbutton.png</file>
+        <file>images/pushbutton_hover.png</file>
+        <file>images/pushbutton_pressed.png</file>
     </qresource>
 </RCC>

@@ -6,9 +6,8 @@ Created on Sun Oct 18 09:58:23 2009
 """
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import *
-from PyQt4.QtCore import QObject, QVariant, SIGNAL, QString, QSize, QPoint
+from PyQt4.QtCore import QObject, pyqtSignal, QSize, QPoint, SIGNAL
 from PyQt4.QtCore import Qt
-from PyQt4.QtGui import *
 from perspective import Perspective
 from config import CONF, App_Name
 
@@ -73,8 +72,8 @@ class MainWindow(QtGui.QMainWindow):
         for key, value in actions.items():
             a = QAction(value['text'], self)
             a.setShortcut(QKeySequence(value['shortcut']))
-            a.setData(QVariant(unicode(key)))
-            QObject.connect(a, SIGNAL('triggered(bool)'), self.dispatchAction)
+            a.setData(unicode(key))
+            a.triggered.connect(self.dispatchAction)
             self._actions[key] = a
 
     def dispatchAction(self, checked = False):

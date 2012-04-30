@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
+from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from styledbar import StyledBar
-from button import ToolButton
-from combobox import ComboBox
+from creator.fancy import StyledBar, ToolButton, ComboBox
 import os
-import fancy_rc
+import creator.fancy.fancy_rc
 from creator.utils import encoding, random_key
+from editor import CodeEditor
 
 class EditorView(QWidget):
     def __init__(self, parent = None, editorWidget = None):
@@ -15,7 +15,7 @@ class EditorView(QWidget):
         self._stack = QStackedWidget(self)
         self._widget = None
         if editorWidget is None:
-            editorWidget = QWidget
+            editorWidget = CodeEditor
         self._viewFactory = editorWidget
         self._pathWidgets = {}
         toolBarLayout = QHBoxLayout()
@@ -37,10 +37,11 @@ class EditorView(QWidget):
         lay.addWidget(self._toolBar)
         lay.addWidget(self._stack)
         
-        QObject.connect(self._navigationComboBox, SIGNAL('currentIndexChanged(int)'), self.activeEditor)
-        QObject.connect(close, SIGNAL('clicked()'), self.closeMe)
-        
-    def closeMe(self):
+        self._navigationComboBox.currentIndexChanged.connect(self.activeEditor)
+        close.clicked.connect(self.closeMe)
+    
+    @QtCore.pyqtSlot("bool")
+    def closeMe(self, checked=False):
         index = self._navigationComboBox.currentIndex()
         newindex = index - 1
         if newindex < 0: newindex = 0

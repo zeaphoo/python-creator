@@ -4,8 +4,8 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from math import log
 from creator.config import CONF, get_font
-from creator.fancy import SyntaxEditor
 from creator.utils import sourcecode
+from syntaxeditor import SyntaxEditor
 
 
 class CodeEditor(SyntaxEditor):

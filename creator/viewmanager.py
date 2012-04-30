@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from fancy import Navigation, EditorView
 from PyQt4.QtGui import QWidget
-from views import FileSystemView, CodeEditor
+from editor import EditorView
+from views import Navigation, FileSystemView
 
 class NavigationViewsManager:
     def __init__(self):
@@ -26,7 +26,7 @@ class ViewManager:
     def _initViews(self):
         nav = Navigation(NavigationViewsManager())
         self._views['navigation'] = nav
-        ed = EditorView(None, CodeEditor)
+        ed = EditorView(None)
         self._views['editor'] = ed
         
     def getView(self, name):

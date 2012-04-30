@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
-
+from PyQt4 import QtGui
 from PyQt4.QtGui import *
-from PyQt4.QtCore import QRect
+from PyQt4.QtCore import Qt, QRect, pyqtSignal
+from PyQt4.QtGui import QWidget, QPainter, QColor
+from base import ToolButton, ComboBox
+import fancy_rc
 from theme import theme
+
 
 class StyledBar(QWidget):
     def __init__(self, parent = None):
@@ -97,3 +101,56 @@ class StyledSeparator(QWidget):
                         rect.topLeft().y() + offset,
                         rect.topRight().x() - margin,
                         rect.topRight().y() + offset)
+
+
+class EdgeLine(QWidget):
+    def __init__(self, editor):
+        super(EdgeLine, self).__init__(editor)
+        self.code_editor = editor
+        self.column = 80
+        
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        color = QColor(Qt.darkGray)
+        color.setAlphaF(.5)
+        painter.fillRect(event.rect(), color)
+        
+
+class View(QWidget):
+    sigCloseView = pyqtSignal('QString', name='closeView')
+    def __init__(self, parent = None):
+        super(View, self).__init__(parent)
+        self._toolBar = StyledBar(self)
+        self._parentView = None
+        toolBarLayout = QHBoxLayout()
+        toolBarLayout.setMargin(0)
+        toolBarLayout.setSpacing(0)
+        self._toolBar.setLayout(toolBarLayout)
+        self._navigationComboBox = ComboBox(self)
+        toolBarLayout.addWidget(self._navigationComboBox)
+        
+        close = ToolButton()
+        close.setIcon(QIcon(":/fancy/images/closebutton.png"))
+        close.setToolTip("Close")
+        toolBarLayout.addWidget(close);
+        
+        lay = QVBoxLayout()
+        lay.setMargin(0)
+        lay.setSpacing(0)
+        self.setLayout(lay)
+        lay.addWidget(self._toolBar)
+        
+        close.clicked.connect(self.closeMe)
+    
+    def setParentView(self, view):
+        self._parentView = view
+    
+    def getParentView(self):
+        return self._parentView
+        
+    parentView = property(getParentView, setParentView)
+    
+    def closeMe(self):
+        if sef.parentView:
+            self.parentView.closeChildView(self)
+            
